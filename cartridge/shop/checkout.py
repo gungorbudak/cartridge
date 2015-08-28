@@ -117,6 +117,11 @@ def initial_order_data(request, form_class=None):
             previous = list(Order.objects.filter(**lookup).values())[:1]
             if len(previous) > 0:
                 initial.update(previous[0])
+        # Don't bring callback_uuid from previous session
+        try:
+            del initial["callback_uuid"]
+        except KeyError:
+            pass
     if not initial and request.user.is_authenticated():
         # No previous order data - try and get field values from the
         # logged in user. Check the profile model before the user model
