@@ -468,6 +468,12 @@ class Order(SiteRelated):
             self.total -= Decimal(self.discount_total)
         if self.tax_total is not None:
             self.total += Decimal(self.tax_total)
+            
+        if self.shipping_type is not None:
+            self.shipping_type = self.shipping_type.encode('utf-8')
+        if self.tax_type is not None:
+            self.tax_type = self.tax_type.encode('utf-8')
+            
         self.save()  # We need an ID before we can add related items.
         for item in request.cart:
             product_fields = [f.name for f in SelectedProduct._meta.fields]
